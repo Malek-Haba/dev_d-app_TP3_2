@@ -8,36 +8,37 @@ import java.net.Socket;
 public class Client {
     public static void main(String[] args) {
         try {
-            // Define the server's IP address and port
+            // Étape 1 : Création de l'adresse du serveur
             InetAddress serverAddress = InetAddress.getByName("localhost");
             InetSocketAddress serverSocketAddress = new InetSocketAddress(serverAddress, 1234);
 
-            // Create a socket to connect to the server
+            // Étape 2 : Création d'un socket client et connexion au serveur
             Socket clientSocket = new Socket();
 
-            // Connect to the server
+            // Étape 3 : Établissement de la connexion avec le serveur
             clientSocket.connect(serverSocketAddress);
 
-            // Set up output stream to send an Operation object to the server
+            // Étape 4 : Obtention du flux de sortie du socket
             OutputStream output = clientSocket.getOutputStream();
             ObjectOutputStream os = new ObjectOutputStream(output);
 
-            // Create an Operation object (40 * 20)
+            // Étape 5 : Création d'un objet "operation" (opération mathématique)
             operation op = new operation(40, 20, '+');
 
-            // Send the Operation object to the server
+            // Étape 6 : Envoi de l'objet "operation" au serveur
             os.writeObject(op);
 
-            // Set up input stream to receive a modified Operation object from the server
+            // Étape 7 : Obtention du flux d'entrée du socket
             InputStream input = clientSocket.getInputStream();
             ObjectInputStream is = new ObjectInputStream(input);
 
-            // Receive and read the modified Operation object
+            // Étape 8 : Réception de l'objet "operation" résultat du serveur
             op = (operation) is.readObject();
 
-            // Print the result
+            // Étape 9 : Affichage du résultat
             System.out.println("Result received from the server: " + op.getRes());
         } catch (Exception e) {
+            // En cas d'erreur, affichage d'un message d'erreur et lancement d'une exception
             System.out.println("Client: An error occurred - " + e.getMessage());
             throw new RuntimeException(e);
         }
